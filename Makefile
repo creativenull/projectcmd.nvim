@@ -1,2 +1,2 @@
 all:
-	luacheck all
+	luacheck lua
