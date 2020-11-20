@@ -1,4 +1,4 @@
-local utils = require('projectrc.utils')
+local utils = require('./utils')
 
 local projectrc = {}
 
