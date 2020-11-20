@@ -33,8 +33,8 @@ end
 -- Main setup
 local projectrc = {}
 function projectrc.setup()
-    if vim.g.projectrc_path == nil then
-        vim.g.projectrc_path = vim.fn.getcwd() .. '/.vim/settings.vim'
+    if vim.g.projectrc_filepath == nil then
+        vim.g.projectrc_filepath = vim.fn.getcwd() .. '/.vim/settings.vim'
     end
 
     if has_key() and is_key_match() then
