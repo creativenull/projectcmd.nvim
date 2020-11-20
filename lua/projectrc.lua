@@ -37,9 +37,9 @@ function projectrc.setup()
         vim.g.projectrc_filepath = vim.fn.getcwd() .. '/.vim/settings.vim'
     end
 
-    if has_key() and is_key_match() then
+    -- if has_key() and is_key_match() then
         load_project_settings()
-    end
+    -- end
 end
 
 return projectrc
