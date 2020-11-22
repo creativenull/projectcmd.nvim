@@ -1,2 +1,2 @@
-# Projectrc Plugin (WIP)
-A plugin to load vimscript (and lua, eventually) from a project directory.
+# ProjectCMD (WIP)
+A plugin to load vimscript (also lua, eventually) from a project directory.
