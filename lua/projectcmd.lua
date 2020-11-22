@@ -1,4 +1,5 @@
 local utils = require('projectcmd.utils')
+local vim = vim
 
 local M = {}
 
