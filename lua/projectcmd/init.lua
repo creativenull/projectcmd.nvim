@@ -1,8 +1,6 @@
 local utils = require('projectcmd.utils')
 local vim = vim
 
-local M = {}
-
 -- Checks if the global variable is properly defined
 local function has_key()
     if vim.g.projectrc_key == nil and vim.g.projectrc_key ~= '' then
@@ -34,7 +32,7 @@ local function load_project_settings()
 end
 
 -- Main setup
-function M.setup()
+local function setup()
     if vim.g.projectrc_filepath == nil then
         vim.g.projectrc_filepath = vim.fn.getcwd() .. '/.vim/settings.vim'
     end
@@ -44,4 +42,4 @@ function M.setup()
     -- end
 end
 
-return M
+return { setup = setup }
