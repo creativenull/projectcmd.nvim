@@ -47,7 +47,7 @@ local function validate_opts(opts)
         if opts.type == 'vim' then
             opts['filepath'] = vim.fn.getcwd() .. '/.vim/settings.vim'
         elseif opts.type == 'lua' then
-            opts['filepath'] = vim.fn.getcwd() .. '/.vim/settings.vim'
+            opts['filepath'] = vim.fn.getcwd() .. '/.vim/settings.lua'
         else
             print(PROJECTCMD .. ' Error: Not a valid type')
         end
