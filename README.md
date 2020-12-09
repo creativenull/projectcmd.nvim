@@ -4,16 +4,26 @@ A plugin to load custom vimscript (lua, eventually) from a project directory.
 
 ## Installation
 
-Using `packer.nvim` or similar package manager:
+[Neovim nightly][nightly] (v0.5 or build from `master` branch) is required.
+
+Install via a plugin manager, any will do, here are examples using packer, minpac and vim-plug.
+
+[packer.nvim][packer]
 
 ```lua
 use { 'creativenull/projectcmd.nvim', opt = true }
 ```
 
-Minpac example:
+[Minpac][minpac]
 
-```lua
+```vim
 call minpac#add('creativenull/projectcmd.nvim', { 'type': 'opt'  })
+```
+
+[vim-plug][vim-plug]
+
+```vim
+Plug 'creativenull/projectcmd.nvim'
 ```
 
 ## Setup
@@ -59,3 +69,8 @@ autocmd VimEnter echom 'Loaded project settings'
 `.vim/settings.lua`
 
 Coming Soon
+
+[nightly]: https://github.com/neovim/neovim/releases/tag/nightly
+[packer]: https://github.com/wbthomason/packer.nvim
+[minpac]: https://github.com/k-takata/minpac
+[vim-plug]: https://github.com/junegunn/vim-plug
