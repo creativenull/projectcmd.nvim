@@ -46,8 +46,9 @@ require'projectcmd'.setup {
 ### Add key to project
 
 Create the `settings.vim` in `$PROJECT_DIR/.vim/settings.vim` where `$PROJECT_DIR` is your project root directory.
+Add the `SECRET_KEY` at the top of the file as a comment, so for a vim file add the key after `"=`.
 
-#### Vimscript
+`.vim/settings.vim`
 
 ```vim
 "=SECRET_KEY
@@ -55,6 +56,6 @@ Create the `settings.vim` in `$PROJECT_DIR/.vim/settings.vim` where `$PROJECT_DI
 autocmd VimEnter echom 'Loaded project settings'
 ```
 
-#### Lua
+`.vim/settings.lua`
 
 Coming Soon
