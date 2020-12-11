@@ -4,7 +4,7 @@ A plugin to load custom vimscript (lua, eventually) from a project directory.
 
 ## Installation
 
-[Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required_.
+[Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
 
 Install via a plugin manager, any will do, here are examples using packer, minpac and vim-plug.
 
