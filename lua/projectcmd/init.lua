@@ -1,9 +1,5 @@
 local utils = require('projectcmd.utils')
 
-if vim.g.projectcmd_loaded == nil then
-    vim.g.projectcmd_loaded = true
-end
-
 local PROJECTCMD = '[PROJECTCMD]'
 
 -- Checks if the global variable is properly defined
@@ -33,7 +29,7 @@ local function is_key_match(opts)
     if opts.type == 'vim' then
         filekey = string.sub(first_line, 3)
     elseif opts.type == 'lua' then
-        filekey = string.sub(first_line, 2)
+        filekey = string.sub(first_line, 3)
     end
 
     return filekey == opts.key
@@ -75,8 +71,8 @@ local function setup(opts)
     local _opts = validate_opts(opts)
 
     if has_key(_opts.key) then
-        if is_key_match(opts) then
-            source_file(opts)
+        if is_key_match(_opts) then
+            source_file(_opts)
         end
     else
         print(PROJECTCMD .. ' Key is required!')
