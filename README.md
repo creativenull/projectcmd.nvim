@@ -66,15 +66,17 @@ require'projectcmd'.setup {
 ### Add key to project
 
 Create the `settings.vim` in `$PROJECT_DIR/.vim/settings.vim` where `$PROJECT_DIR` is your project root directory.
-Add the `SECRET_KEY` at the top of the file as a comment. If you added a global env variable to you OS, as mentioned
-above, you can enter your key via the command line:
+Add the `SECRET_KEY` at the top of the file as a comment. If you added a global env variable, as mentioned above, you
+can add your key via the command line (assuming you're in the project directory):
 
 ```sh
-echo "\"=${NVIMRC_PROJECTCMD_KEY}" > $PROJECT_DIR/.vim/settings.vim
+echo "\"=${NVIMRC_PROJECTCMD_KEY}" > ./.vim/settings.vim
 
 # For lua
-echo "--${NVIMRC_PROJECTCMD_KEY}" > $PROJECT_DIR/.vim/settings.lua
+echo "--${NVIMRC_PROJECTCMD_KEY}" > ./.vim/settings.lua
 ```
+
+Or enter manually like below:
 
 #### .vim/settings.vim
 
@@ -90,8 +92,6 @@ autocmd VimEnter * echom 'Loaded project settings'
 
 vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
 ```
-
-Coming Soon
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
