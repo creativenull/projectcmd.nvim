@@ -1,6 +1,7 @@
 # ProjectCMD (WIP)
 
-A plugin to load custom vimscript (lua, eventually) from a project directory.
+A plugin to run project-level vim config in your project directory. For example, run different linters based on project
+without changing your global config.
 
 ## Installation
 
@@ -65,17 +66,30 @@ require'projectcmd'.setup {
 ### Add key to project
 
 Create the `settings.vim` in `$PROJECT_DIR/.vim/settings.vim` where `$PROJECT_DIR` is your project root directory.
-Add the `SECRET_KEY` at the top of the file as a comment, so for a vim file add the key after `"=`.
+Add the `SECRET_KEY` at the top of the file as a comment. If you added a global env variable to you OS, as mentioned
+above, you can enter your key via the command line:
+
+```sh
+echo "\"=${NVIMRC_PROJECTCMD_KEY}" > $PROJECT_DIR/.vim/settings.vim
+
+# For lua
+echo "--${NVIMRC_PROJECTCMD_KEY}" > $PROJECT_DIR/.vim/settings.lua
+```
 
 #### .vim/settings.vim
 
 ```vim
 "=SECRET_KEY
 
-autocmd VimEnter echom 'Loaded project settings'
+autocmd VimEnter * echom 'Loaded project settings'
 ```
 
 #### .vim/settings.lua
+```lua
+--SECRET_KEY
+
+vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
+```
 
 Coming Soon
 
