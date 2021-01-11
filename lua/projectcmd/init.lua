@@ -1,6 +1,4 @@
-local utils = require('projectcmd.utils')
-
-local PROJECTCMD = '[PROJECTCMD]'
+local utils = require('creativenull.utils')
 
 -- Checks if the global variable is properly defined
 local function has_key(key)
@@ -13,7 +11,7 @@ end
 
 -- Checks if the file exists and match the key
 local function is_key_match(opts)
-    if utils.file_exists(opts.filepath) == false then
+    if vim.fn.filereadable(opts.filepath) == 0 then
         return false
     end
 
@@ -35,29 +33,6 @@ local function is_key_match(opts)
     return filekey == opts.key
 end
 
--- Validate user options
-local function validate_opts(opts)
-    if opts['key'] == nil then
-        opts['key'] = ''
-    end
-
-    if opts['type'] == nil then
-        opts['type'] = 'vim'
-    end
-
-    if opts['filepath'] == nil then
-        if opts.type == 'vim' then
-            opts['filepath'] = vim.fn.getcwd() .. '/.vim/settings.vim'
-        elseif opts.type == 'lua' then
-            opts['filepath'] = vim.fn.getcwd() .. '/.vim/settings.lua'
-        else
-            print(PROJECTCMD .. ' Error: Not a valid type')
-        end
-    end
-
-    return opts
-end
-
 local function source_file(opts)
     if opts.type == 'vim' then
         vim.cmd('source ' .. opts.filepath)
@@ -68,14 +43,14 @@ end
 
 -- Loads the settings.vim into runtime
 local function setup(opts)
-    local _opts = validate_opts(opts)
+    opts = utils.validate_opts(opts)
 
-    if has_key(_opts.key) then
-        if is_key_match(_opts) then
-            source_file(_opts)
+    if has_key(opts.key) then
+        if is_key_match(opts) then
+            source_file(opts)
         end
     else
-        print(PROJECTCMD .. ' Key is required!')
+        utils.printd('Key is required!')
     end
 end
 
