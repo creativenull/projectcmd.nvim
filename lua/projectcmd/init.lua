@@ -1,4 +1,5 @@
-local utils = require('creativenull.utils')
+local utils = require 'projectcmd.utils'
+local M = {}
 
 -- Checks if the global variable is properly defined
 local function has_key(key)
@@ -33,7 +34,8 @@ local function is_key_match(opts)
     return filekey == opts.key
 end
 
-local function source_file(opts)
+function M.enable()
+    opts = vim.g.projectcmd_options
     if opts.type == 'vim' then
         vim.cmd('source ' .. opts.filepath)
     elseif opts.type == 'lua' then
@@ -42,16 +44,16 @@ local function source_file(opts)
 end
 
 -- Loads the settings.vim into runtime
-local function setup(opts)
+function M.setup(opts)
     opts = utils.validate_opts(opts)
 
     if has_key(opts.key) then
         if is_key_match(opts) then
-            source_file(opts)
+            vim.g.projectcmd_options = opts
         end
     else
-        utils.printd('Key is required!')
+        utils.print_err('Key is required!')
     end
 end
 
-return { setup = setup }
+return M

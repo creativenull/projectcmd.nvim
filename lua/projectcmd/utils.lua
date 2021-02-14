@@ -1,14 +1,18 @@
-local config = require('creativenull.config')
+local config = require 'projectcmd.config'
 local M = {}
 
 function M.printd(str)
     print(config.PRINTF_PLUGIN .. ' ' .. str)
 end
 
+function M.print_err(str)
+    vim.api.nvim_err_writeln(config.PRINTF_PLUGIN .. ' ' .. str)
+end
+
 -- Validate user options
 function M.validate_opts(opts)
     if opts.key == nil then
-        opts.key= ''
+        opts.key = ''
     end
 
     if opts.type == nil then
@@ -21,8 +25,12 @@ function M.validate_opts(opts)
         elseif opts.type == 'lua' then
             opts.filepath = vim.fn.getcwd() .. '/.vim/settings.lua'
         else
-            M.printd('Error: Not a valid type')
+            M.print_err('Not a valid type')
         end
+    end
+
+    if opts.autoload == nil then
+        opts.autoload = false
     end
 
     return opts
