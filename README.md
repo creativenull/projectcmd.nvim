@@ -87,11 +87,35 @@ autocmd VimEnter * echom 'Loaded project settings'
 ```
 
 #### .vim/settings.lua
+
 ```lua
 --SECRET_KEY
 
 vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
 ```
+
+### Default Settings
+
+```lua
+require'projectcmd'.setup {
+    key = nil,
+    type = 'vim',
+    filepath = vim.fn.cwd() .. '/.vim/settings.vim',
+    autoload = false
+}
+```
+
+Key | Default | Description
+----|---------|------------
+`key` | (requried) | The secret key that will verify the `settings.vim/.lua`, this must not be empty
+`type` | `'vim'` | The settings file type: `'vim' or 'lua'`
+`filepath` | `'$ROOT_PROJECT/.vim/settings.vim'` | The filepath location of the settings file
+`autoload` | `false` | Should the plugin autoload the settings file or not
+
+#### Autoloading
+
+By default this is disabled to manually source the settings file use `:ProjectCmdEnable` command. If you want to
+automatically source the settings file, set the `autoload` key to `true`.
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
