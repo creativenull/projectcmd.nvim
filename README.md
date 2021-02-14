@@ -3,6 +3,12 @@
 A plugin to run project-level vim config in your project directory. For example, run different linters based on project
 without changing your global config.
 
+## TODO
+
++ [ ] Omit the `type` key once we can figure out what the filepath extension
++ [ ] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
+one file
+
 ## Installation
 
 [Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
@@ -116,13 +122,6 @@ Key | Default | Description
 
 By default this is disabled to manually source the settings file use `:ProjectCmdEnable` command. If you want to
 automatically source the settings file, set the `autoload` key to `true`.
-
-
-# TODO
-
-+ [ ] Omit the `type` key once we can figure out what the filepath extension
-+ [ ] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
-one file
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
