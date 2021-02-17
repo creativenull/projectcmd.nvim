@@ -36,7 +36,7 @@ don't need to specify the linter and/or fixer in your vimrc and manually changin
 
 ## TODO
 
-+ [ ] Omit the `type` key once we can figure out what the filepath extension
++ [ ] Omit the `type` key once we can automatically source based on the filepath extension
 + [ ] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
 one file
 
@@ -77,7 +77,8 @@ packadd projectcmd.nvim
 
 lua <<EOF
 require'projectcmd'.setup {
-    key = 'SECRET_KEY'
+    key = 'my_not_so_secret_key',
+    autoload = true
 }
 EOF
 ```
@@ -87,7 +88,8 @@ EOF
 vim.cmd [[ packadd projectcmd.nvim ]]
 
 require'projectcmd'.setup {
-    key = 'SECRET_KEY'
+    key = 'my_not_so_secret_key',
+    autoload = true
 }
 ```
 
@@ -98,9 +100,15 @@ It's a better practice to create an environment variable and keep the key there,
 vim.cmd [[ packadd projectcmd.nvim ]]
 
 require'projectcmd'.setup {
-    key = os.getenv('NVIMRC_PROJECTCMD_KEY')
+    key = os.getenv('NVIMRC_PROJECTCMD_KEY'),
+    autoload = true
 }
 ```
+
+#### Autoloading
+
+By default this is disabled, and encourages you to run `:ProjectCmdEnable` command to manually source the file. If you
+want to automatically source the settings file, then set the `autoload` key to `true`.
 
 ### Add key to project
 
@@ -150,11 +158,6 @@ Key | Default | Description
 `type` | `'vim'` | The settings file type: `'vim' or 'lua'`
 `filepath` | `'$ROOT_PROJECT/.vim/settings.vim'` | The filepath location of the settings file
 `autoload` | `false` | Should the plugin autoload the settings file or not
-
-#### Autoloading
-
-By default this is disabled to manually source the settings file use `:ProjectCmdEnable` command. If you want to
-automatically source the settings file, set the `autoload` key to `true`.
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
