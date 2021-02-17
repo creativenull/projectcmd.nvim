@@ -1,2 +1,2 @@
-vim.cmd 'au! FileType markdown set spell'
+vim.cmd 'au! FileType markdown setlocal spell'
 print('Project Settings were loaded!')
