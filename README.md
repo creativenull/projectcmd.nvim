@@ -1,4 +1,4 @@
-# ProjectCMD (WIP)
+# ProjectCMD (Alpha)
 
 A vim plugin to run your project-level neovim configuration.
 
