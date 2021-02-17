@@ -1,7 +1,38 @@
 # ProjectCMD (WIP)
 
-A plugin to run project-level vim config in your project directory. For example, run different linters based on project
-without changing your global config.
+A vim plugin to run your project-level neovim configuration.
+
+## Motivation
+
+If you've used `set exrc` before, you would be informed that using it might execute malicious code, see
+[`:h 'exrc'`][vim-exrc]. Therefore, you would've been advised to also enable `set secure` to disable some vim config
+options like `autocmds`, shell executions and write commands, see [`:h 'secure'`][vim-secure].
+
+However, there might some options you may want to conditionally set in a project-level basis but the limitations of
+`secure` restrict you those options.
+
+__ProjectCMD__ tries to tackle this by not using `set secure` or `set exrc` but sourcing a .vim/.lua file in
+your `$PROJECT_DIR/.vim/settings.vim`/`$PROJECT_DIR/.vim/settings.lua` and only executing the code if it matches a
+secret key that you set in your `init.vim` or within an profile environment variable like `$NVIMRC_PROJECTCMD_KEY`
+obfuscated from a potential malicious user.
+
+Essentially, the goal of this plugin is to help you safely source your project-specific options. Think of it like an
+`.vscode/settings.json` file but for vim.
+
+### Example
+
+For example, let's say you're using [ALE][ale-plugin] on a JavaScript project and you only want to enable tsserver,
+eslint and prettier for your code. Within your `$PROJECT_DIR/.vim/settings.vim` you can add:
+
+```vim
+"=SECRET_KEY
+au! FileType javascript let b:ale_linters = ['tsserver', 'eslint'] | let b:ale_fixers = ['prettier']
+```
+
+Where `SECRET_KEY` is the secret key you have placed somewhere in your vimrc or profile environment variable. What the
+current autocmd does, is that when you open a `javascript` type file it will set buffer variables defined by ALE to run
+only the specified linters and fixers, therefore, overriding the default ALE variables set for JavaScript. This way, you
+don't need to specify the linter and/or fixer in your vimrc and manually changing it every time for different projects.
 
 ## TODO
 
@@ -24,7 +55,7 @@ use { 'creativenull/projectcmd.nvim', opt = true }
 [Minpac][minpac]
 
 ```vim
-call minpac#add('creativenull/projectcmd.nvim', { 'type': 'opt'  })
+call minpac#add('creativenull/projectcmd.nvim', { 'type': 'opt' })
 ```
 
 [vim-plug][vim-plug]
@@ -33,10 +64,12 @@ call minpac#add('creativenull/projectcmd.nvim', { 'type': 'opt'  })
 Plug 'creativenull/projectcmd.nvim'
 ```
 
+> _Note for vim-plug_: No need to add `packadd projectcmd.nvim`, since it loads automatically
+
 ## Configuration
 
 First you'll need a key that will be used to compare the key within your project-level settings. To setup a key, you
-add the `key` key (😉) in the setup.
+add the `key` key in the setup.
 
 ```vim
 " init.vim
@@ -58,7 +91,7 @@ require'projectcmd'.setup {
 }
 ```
 
-It's a better practice to create an enviroment variable and keep the key there, so it's not specific to your init file.
+It's a better practice to create an environment variable and keep the key there, so it's not specific to your init file.
 
 ```lua
 -- init.lua
@@ -113,7 +146,7 @@ require'projectcmd'.setup {
 
 Key | Default | Description
 ----|---------|------------
-`key` | (requried) | The secret key that will verify the `settings.vim/.lua`, this must not be empty
+`key` | (required) | The secret key that will verify the `settings.vim/.lua`, this must not be empty
 `type` | `'vim'` | The settings file type: `'vim' or 'lua'`
 `filepath` | `'$ROOT_PROJECT/.vim/settings.vim'` | The filepath location of the settings file
 `autoload` | `false` | Should the plugin autoload the settings file or not
@@ -127,3 +160,6 @@ automatically source the settings file, set the `autoload` key to `true`.
 [packer]: https://github.com/wbthomason/packer.nvim
 [minpac]: https://github.com/k-takata/minpac
 [vim-plug]: https://github.com/junegunn/vim-plug
+[ale-plugin]: https://github.com/dense-analysis/ale
+[vim-exrc]: https://vimhelp.org/options.txt.html#'exrc'
+[vim-secure]: https://vimhelp.org/options.txt.html#'secure'
