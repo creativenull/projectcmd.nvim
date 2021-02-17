@@ -2,6 +2,14 @@
 
 A vim plugin to run your project-level neovim configuration.
 
+# Table of Contents
+
+1. [Motivation](#motivation)
+2. [Installation](#installation)
+3. [Configuration](#configuration)
+4. [Default Settings](#default-settings)
+5. [Troubleshooting](#troubleshooting)
+
 ## Motivation
 
 If you've used `set exrc` before, you would be informed that using it might execute malicious code, see
@@ -141,7 +149,7 @@ autocmd VimEnter * echom 'Loaded project settings'
 vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
 ```
 
-### Default Settings
+## Default Settings
 
 ```lua
 require'projectcmd'.setup {
@@ -158,6 +166,11 @@ Key | Default | Description
 `type` | `'vim'` | The settings file type: `'vim' or 'lua'`
 `filepath` | `'$ROOT_PROJECT/.vim/settings.vim'` | The filepath location of the settings file
 `autoload` | `false` | Should the plugin autoload the settings file or not
+
+## Troubleshooting
+
++ If you have `autochdir` enabled, make sure to disable it: `set noautochdir`. This messes with getting the current
+working directory.
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
