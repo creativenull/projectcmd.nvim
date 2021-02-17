@@ -35,7 +35,7 @@ local function is_key_match(opts)
 end
 
 function M.enable()
-    opts = vim.g.projectcmd_options
+    local opts = vim.g.projectcmd_options
     if opts.type == 'vim' then
         vim.cmd('source ' .. opts.filepath)
     elseif opts.type == 'lua' then

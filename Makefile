@@ -1,2 +1,2 @@
 all:
-	luacheck lua
+	luacheck --std lua51 ./lua
