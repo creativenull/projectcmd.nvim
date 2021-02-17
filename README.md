@@ -47,6 +47,7 @@ don't need to specify the linter and/or fixer in your vimrc and manually changin
 + [ ] Omit the `type` key once we can automatically source based on the filepath extension
 + [ ] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
 one file
++ [ ] Figure out a way to save previous settings, so that we can implement the disable feature
 
 ## Installation
 
