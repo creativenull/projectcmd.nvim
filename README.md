@@ -47,7 +47,8 @@ don't need to specify the linter and/or fixer in your vimrc and manually changin
 + [X] Omit the `type` key once we can automatically source based on the filepath extension. Solution: removed type
 + [X] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
 one file. Solution: in this case, use .vim only
-+ [ ] Figure out a way to save previous settings, so that we can implement the disable feature
++ [ ] Figure out a way to save previous settings, so that we can implement the disable feature. Solution: re-source
+vimrc file after calling `:ProjectCmdDisable` (not implemented)
 
 ## Installation
 
