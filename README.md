@@ -44,9 +44,9 @@ don't need to specify the linter and/or fixer in your vimrc and manually changin
 
 ## TODO
 
-+ [ ] Omit the `type` key once we can automatically source based on the filepath extension
-+ [ ] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
-one file
++ [X] Omit the `type` key once we can automatically source based on the filepath extension. Solution: removed type
++ [X] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
+one file. Solution: in this case, use .vim only
 + [ ] Figure out a way to save previous settings, so that we can implement the disable feature
 
 ## Installation
@@ -155,8 +155,6 @@ vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
 ```lua
 require'projectcmd'.setup {
     key = nil,
-    type = 'vim',
-    filepath = vim.fn.cwd() .. '/.vim/settings.vim',
     autoload = false
 }
 ```
@@ -164,8 +162,6 @@ require'projectcmd'.setup {
 Key | Default | Description
 ----|---------|------------
 `key` | (required) | The secret key that will verify the `settings.vim/.lua`, this must not be empty
-`type` | `'vim'` | The settings file type: `'vim' or 'lua'`
-`filepath` | `'$ROOT_PROJECT/.vim/settings.vim'` | The filepath location of the settings file
 `autoload` | `false` | Should the plugin autoload the settings file or not
 
 ## Troubleshooting
