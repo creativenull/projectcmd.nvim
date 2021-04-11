@@ -1,39 +1,50 @@
 local config = require 'projectcmd.config'
 local M = {}
 
-function M.printd(str)
-    print(config.PRINTF_PLUGIN .. ' ' .. str)
+-- Get the settings filepath in the current working dir
+-- @return string|nil
+local function get_filepath()
+  local project_vim_settings_dir = vim.fn.getcwd() .. '/.vim/settings.vim'
+  local project_lua_settings_dir = vim.fn.getcwd() .. '/.vim/settings.lua'
+
+  if vim.fn.filereadable(project_vim_settings_dir) == 1 then
+    return project_vim_settings_dir
+  elseif vim.fn.filereadable(project_lua_settings_dir) == 1 then
+    return project_lua_settings_dir
+  end
+
+  return nil
 end
 
+-- Print debug type
+-- @param str string
+-- @return void
+function M.printd(str)
+  print(config.PRINTF_PLUGIN .. ' ' .. str)
+end
+
+-- Print error
+-- @param str string
+-- @return void
 function M.print_err(str)
-    vim.api.nvim_err_writeln(config.PRINTF_PLUGIN .. ' ' .. str)
+  vim.api.nvim_err_writeln(config.PRINTF_PLUGIN .. ' ' .. str)
 end
 
 -- Validate user options
+-- @param opts table
+-- @return table
 function M.validate_opts(opts)
-    if opts.key == nil then
-        opts.key = ''
-    end
+  if opts.key == nil then
+    opts.key = ''
+  end
 
-    if opts.type == nil then
-        opts.type = 'vim'
-    end
+  opts.filepath = get_filepath()
 
-    if opts.filepath == nil then
-        if opts.type == 'vim' then
-            opts.filepath = vim.fn.getcwd() .. '/.vim/settings.vim'
-        elseif opts.type == 'lua' then
-            opts.filepath = vim.fn.getcwd() .. '/.vim/settings.lua'
-        else
-            M.print_err('Not a valid type')
-        end
-    end
+  if opts.autoload == nil then
+    opts.autoload = false
+  end
 
-    if opts.autoload == nil then
-        opts.autoload = false
-    end
-
-    return opts
+  return opts
 end
 
 return M

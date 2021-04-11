@@ -5,8 +5,7 @@ endif
 let s:save_cpo = &cpo
 set cpo&vim
 
-command! ProjectCmdEnable lua require'projectcmd'.enable()
-command! ProjectCmdDisable lua print('not implemented')
+command! ProjectCmdEnable lua require 'projectcmd'.enable()
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
