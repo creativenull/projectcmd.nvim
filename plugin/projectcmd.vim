@@ -1,11 +1,7 @@
 if exists('g:loaded_projectcmd') || &cp
-    finish
+  finish
 endif
 
-let s:save_cpo = &cpo
-set cpo&vim
+command! ProjectCmdEnable echom 'Not Implemented'
 
-command! ProjectCmdEnable lua require 'projectcmd'.enable()
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
+let g:loaded_projectcmd = 1
