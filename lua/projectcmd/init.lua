@@ -53,16 +53,15 @@ M.setup = function()
   init()
 
   local current_dir = vim.fn.getcwd()
-  local init_file = current_dir .. '/.vim/init.lua'
+  local init_filepath = current_dir .. '/.vim/init.lua'
 
-  -- Validate file
-  if vim.fn.filereadable(init_file) == 0 then
-    vim.api.nvim_err_writeln('NOT FOUND')
+  -- Ignore execution if not found
+  if vim.fn.filereadable(init_filepath) == 0 then
     return
   end
 
   -- Get the hash of the file
-  local hashed_init = get_hash(init_file)
+  local hashed_contents = get_hash(init_filepath)
 
   -- Check if hash matches allowlist, or changed
   local allowed_found = false
@@ -74,7 +73,7 @@ M.setup = function()
     local allowed_checksum = current_line_contents[2]
 
     if allowed_filepath == current_dir then
-      if allowed_checksum == hashed_init then
+      if allowed_checksum == hashed_contents then
         allowed_found = true
         break
       else
@@ -100,14 +99,14 @@ M.setup = function()
     vim.g['projectcmd#prompt_show'] = true
     vim.g['projectcmd#prompt_msg'] = '[PROJECTCMD] New project config file found, add to allowlist? (y/n/C) '
     vim.g['projectcmd#prompt_code'] = 'NEW'
-    vim.g['projectcmd#prompt_args'] = hashed_init
+    vim.g['projectcmd#prompt_args'] = hashed_contents
   end
 
   if changed_checksum then
     vim.g['projectcmd#prompt_show'] = true
     vim.g['projectcmd#prompt_msg'] = '[PROJECTCMD] Config file changed, run? (y/N) '
     vim.g['projectcmd#prompt_code'] = 'CHANGE'
-    vim.g['projectcmd#prompt_args'] = hashed_init
+    vim.g['projectcmd#prompt_args'] = hashed_contents
   end
 
   vim.g['projectcmd#loaded_init'] = true

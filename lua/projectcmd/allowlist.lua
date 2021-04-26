@@ -1,54 +1,57 @@
 local config = require 'projectcmd.config'
 local M = {}
 
-M.add = function(value)
-  local file = io.open(config.ALLOWLIST_FILEPATH, 'a+')
-  file:write(value .. "\n")
-  file:close()
+-- Add the item to the allowlist
+local function _add(value)
+  local fp = io.open(config.ALLOWLIST_FILEPATH, 'a+')
+  fp:write(value)
+  fp:close()
 end
 
-M.update = function(filepath, new_hash)
+-- Update the item in the allowlist
+local function _set(key, value)
+  local fpcontents = io.input(config.ALLOWLIST_FILEPATH):read('a')
   local contents = {}
-  for content in string.gmatch(io.input(config.ALLOWLIST_FILEPATH):read('a'), [[([^]+)]]) do
-    table.insert(contents, content)
-  end
+  for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
 
   for k,v in pairs(contents) do
-    local inner_contents = {}
-    for content in string.gmatch(v, [[([^ ]+)]]) do table.insert(inner_contents, content) end
-    local current_fp = inner_contents[1]
-    if current_fp == filepath then
-      contents[k] = filepath .. ' ' .. new_hash
+    local keyvalues = {}
+    for content in string.gmatch(v, [[([^ ]+)]]) do table.insert(keyvalues, content) end
+    if keyvalues[1] == key then
+      contents[k] = value
     end
   end
 
   print(vim.inspect(contents))
 
-  -- file:close()
-  -- file = io.open(config.ALLOWLIST_FILEPATH, 'w')
-  -- local string_contents = ''
-  -- for k,v in pairs(contents) do
-  --   string_contents = string_contents .. v .. "\n"
-  -- end
-  -- 
-  -- file:write(string_contents)
-  -- file:close()
+  local string_contents = ''
+  for k,value in pairs(contents) do
+    string_contents = string_contents .. value
+  end
+
+  local fp = io.open(config.ALLOWLIST_FILEPATH, 'w')
+  fp:write(string_contents)
+  fp:close()
 end
 
-M.remove = function(checksum)
+-- Remove the item from the allowlist
+local function _remove(key)
 end
 
-M.add_allowlist = function(hash)
-  local curr_dir = vim.fn.getcwd()
-  local init_file = curr_dir .. '/.vim/init.lua'
-  M.add(curr_dir .. ' ' .. hash)
-  dofile(init_file)
+M.add = function(hash)
+  local currdir = vim.fn.getcwd()
+  local value = currdir .. ' ' .. hash .. "\n"
+  _add(value)
 end
 
-M.update_allowlist = function(hash)
-  local curr_dir = vim.fn.getcwd()
-  M.update(curr_dir, hash)
-  dofile(init_file)
+M.update = function(hash)
+  local currdir = vim.fn.getcwd()
+  local value = currdir .. ' ' .. hash .. "\n"
+  _set(currdir, value)
+end
+
+M.remove = function()
+  local currdir = vim.fn.cwd()
 end
 
 return M
