@@ -1,16 +1,18 @@
 local config = require 'projectcmd.config'
+local ALLOWLIST_FILEPATH = config.get_allowlist()
+local BLOCKLIST_FILEPATH = config.get_blocklist()
 local M = {}
 
 -- Add the item to the allowlist
 local function _add(value)
-  local fp = io.open(config.ALLOWLIST_FILEPATH, 'a+')
+  local fp = io.open(ALLOWLIST_FILEPATH, 'a+')
   fp:write(value)
   fp:close()
 end
 
 -- Update the item in the allowlist
 local function _set(key, value)
-  local fpcontents = io.input(config.ALLOWLIST_FILEPATH):read('a')
+  local fpcontents = io.input(ALLOWLIST_FILEPATH):read('a')
   local contents = {}
   for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
 
@@ -22,14 +24,14 @@ local function _set(key, value)
     end
   end
 
-  print(vim.inspect(contents))
+  -- print(vim.inspect(contents))
 
   local string_contents = ''
   for k,value in pairs(contents) do
     string_contents = string_contents .. value
   end
 
-  local fp = io.open(config.ALLOWLIST_FILEPATH, 'w')
+  local fp = io.open(ALLOWLIST_FILEPATH, 'w')
   fp:write(string_contents)
   fp:close()
 end
