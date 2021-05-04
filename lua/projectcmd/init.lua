@@ -7,19 +7,28 @@ local function set_defaults(opts)
   vim.g['projectcmd#prompt_code'] = ''
   vim.g['projectcmd#prompt_args'] = ''
 
-  if opts == nil or opts.list_filepath == nil then
+  if opts == nil then opts = {} end
+
+  if opts.list_filepath == nil then
     vim.g['projectcmd#list_filepath'] = vim.fn.expand('~/.cache/nvim-nightly/projectcmd')
   else
     vim.g['projectcmd#list_filepath'] = opts.list_filepath
   end
 
-  if opts == nil or opts.config_filepath == nil then
+  if opts.enable == nil then
+    vim.g['projectcmd#enable'] = true
+  else
+    vim.g['projectcmd#enable'] = opts.enable
+  end
+
+  if opts.config_filepath == nil then
     vim.g['projectcmd#config_filepath'] = '/.vim/init.lua'
   else
     vim.g['projectcmd#config_filepath'] = opts.config_filepath
   end
 
-  if opts == nil or opts.message_enabled == nil then
+  vim.g['projectcmd#message_load_response'] = '[PROJECTCMD] Local Config Loaded!'
+  if opts.message_enabled == nil then
     vim.g['projectcmd#message_enabled'] = true
   else
     vim.g['projectcmd#message_enabled'] = opts.message_enabled
@@ -134,6 +143,61 @@ M.setup = function(opts)
   end
 
   vim.g['projectcmd#loaded_init'] = true
+end
+
+M.enable = function()
+  local message = vim.g['projectcmd#message_load_response']
+  local message_enabled = vim.g['projectcmd#message_enabled']
+  local currdir = vim.fn.getcwd()
+  local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
+  dofile(init_filepath)
+  if message_enabled then print(message) end
+end
+
+M.prompt_enable = function()
+  local enable = vim.g['projectcmd#enable']
+  local currdir = vim.fn.getcwd()
+  local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
+  local message = vim.g['projectcmd#message_load_response']
+  local message_enabled = vim.g['projectcmd#message_enabled']
+  local prompt_msg = vim.g['projectcmd#prompt_msg']
+  local prompt_hash = vim.g['projectcmd#prompt_args']
+  local prompt_code = vim.g['projectcmd#prompt_code']
+
+  vim.fn.inputsave()
+  local answer = vim.fn.input(prompt_msg)
+  vim.fn.inputrestore()
+
+  if answer == 'y' then
+    if prompt_code == 'NEW' then
+      require 'projectcmd.allowlist'.add(prompt_hash)
+    elseif prompt_code == 'CHANGE' then
+      require 'projectcmd.allowlist'.update(prompt_hash)
+    end
+
+    if enable then
+      dofile(init_filepath)
+      if message_enabled then
+        -- Make sure message is printed in a new line
+        print(" \n" .. message)
+      end
+    end
+  end
+end
+
+M.no_change_enable = function()
+  local enable = vim.g['projectcmd#enable']
+  local message_enabled = vim.g['projectcmd#message_enabled']
+  local currdir = vim.fn.getcwd()
+  local message = vim.g['projectcmd#message_load_response']
+  local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
+
+  if enable then
+    dofile(init_filepath)
+    if message_enabled then
+      print(message)
+    end
+  end
 end
 
 return M
