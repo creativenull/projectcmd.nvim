@@ -1,4 +1,4 @@
-# ProjectCMD (Alpha)
+# ProjectCMD (Experimental)
 
 A vim plugin to run your project-level neovim configuration.
 
@@ -20,8 +20,7 @@ However, there might some options you may want to conditionally set in a project
 `secure` restrict you those options.
 
 __ProjectCMD__ tries to tackle this by not using `set secure` or `set exrc` but sourcing a .vim/.lua file in
-your `$PROJECT_DIR/.vim/settings.vim`/`$PROJECT_DIR/.vim/settings.lua` and only executing the code if it matches a
-secret key that you set in your `init.vim` or within an profile environment variable like `$NVIMRC_PROJECTCMD_KEY`
+your `$PROJECT_DIR/.vim/init.vim`/`$PROJECT_DIR/.vim/init.lua` and only executing the code if it allowed by the user
 obfuscated from a potential malicious user.
 
 Essentially, the goal of this plugin is to help you safely source your project-specific options. Think of it like an
@@ -30,17 +29,18 @@ Essentially, the goal of this plugin is to help you safely source your project-s
 ### Example
 
 For example, let's say you're using [ALE][ale-plugin] on a JavaScript project and you only want to enable tsserver,
-eslint and prettier for your code. Within your `$PROJECT_DIR/.vim/settings.vim` you can add:
+eslint and prettier for your code. Within your `$PROJECT_DIR/.vim/init.vim` you can add:
 
 ```vim
-"=SECRET_KEY
-au! FileType javascript let b:ale_linters = ['tsserver', 'eslint'] | let b:ale_fixers = ['prettier']
+" $PROJECT_DIR/.vim/init.vim
+autocmd! FileType javascript let b:ale_linters = ['tsserver', 'eslint'] | let b:ale_fixers = ['prettier']
 ```
 
-Where `SECRET_KEY` is the secret key you have placed somewhere in your vimrc or profile environment variable. What the
-current autocmd does, is that when you open a `javascript` type file it will set buffer variables defined by ALE to run
-only the specified linters and fixers, therefore, overriding the default ALE variables set for JavaScript. This way, you
-don't need to specify the linter and/or fixer in your vimrc and manually changing it every time for different projects.
+When you open vim it will prompt you to load the file, once accepted it will execute the file and register ALE commands.
+What the current file does, is that when you open a `javascript` type file it will set buffer variables defined by
+ALE to run only the specified linters and fixers, therefore, overriding the default ALE variables set for JavaScript.
+This way, you don't need to specify the linter and/or fixer in your vimrc and manually changing it every time for
+different projects.
 
 ## TODO
 
@@ -59,13 +59,13 @@ Install via a plugin manager, any will do, here are examples using packer, minpa
 [packer.nvim][packer]
 
 ```lua
-use { 'creativenull/projectcmd.nvim', opt = true }
+use { 'creativenull/projectcmd.nvim', branch = 'v2' }
 ```
 
 [Minpac][minpac]
 
 ```vim
-call minpac#add('creativenull/projectcmd.nvim', { 'type': 'opt' })
+call minpac#add('creativenull/projectcmd.nvim', { 'branch': 'v2' })
 ```
 
 [vim-plug][vim-plug]
@@ -78,94 +78,34 @@ Plug 'creativenull/projectcmd.nvim'
 
 ## Configuration
 
-First you'll need a key that will be used to compare the key within your project-level settings. To setup a key, you
-add the `key` key in the setup.
-
 ```vim
 " init.vim
-packadd projectcmd.nvim
 
-lua <<EOF
-require'projectcmd'.setup {
-    key = 'my_not_so_secret_key',
-    autoload = true
-}
-EOF
+lua require 'projectcmd'.setup {}
 ```
 
 ```lua
 -- init.lua
-vim.cmd [[ packadd projectcmd.nvim ]]
 
-require'projectcmd'.setup {
-    key = 'my_not_so_secret_key',
-    autoload = true
-}
-```
-
-It's a better practice to create an environment variable and keep the key there, so it's not specific to your init file.
-
-```lua
--- init.lua
-vim.cmd [[ packadd projectcmd.nvim ]]
-
-require'projectcmd'.setup {
-    key = os.getenv('NVIMRC_PROJECTCMD_KEY'),
-    autoload = true
-}
+require 'projectcmd'.setup {}
 ```
 
 #### Autoloading
 
-By default this is disabled, and encourages you to run `:ProjectCmdEnable` command to manually source the file. If you
-want to automatically source the settings file, then set the `autoload` key to `true`.
+By default this is enabled, this means the plugin will source the local config file. If you want to manually source the
+local config file, then set the `enable` key to `true`.
 
-### Add key to project
-
-Create the `settings.vim` in `$PROJECT_DIR/.vim/settings.vim` where `$PROJECT_DIR` is your project root directory.
-Add the `SECRET_KEY` at the top of the file as a comment. If you added a global env variable, as mentioned above, you
-can add your key via the command line (assuming you're in the project directory):
-
-```sh
-echo "\"=${NVIMRC_PROJECTCMD_KEY}" > ./.vim/settings.vim
-
-# For lua
-echo "--${NVIMRC_PROJECTCMD_KEY}" > ./.vim/settings.lua
 ```
-
-Or enter manually like below:
-
-#### .vim/settings.vim
-
-```vim
-"=SECRET_KEY
-
-autocmd VimEnter * echom 'Loaded project settings'
-```
-
-#### .vim/settings.lua
-
-```lua
---SECRET_KEY
-
-vim.cmd [[ autocmd VimEnter * echom 'Loaded project settings' ]]
+require 'projectcmd'.setup {
+  enable = false
+}
 ```
 
 ## Default Settings
 
-```lua
-require'projectcmd'.setup {
-    key = nil,
-    autoload = false
-}
-```
-
-Key | Default | Description
-----|---------|------------
-`key` | (required) | The secret key that will verify the `settings.vim/.lua`, this must not be empty
-`autoload` | `false` | Should the plugin autoload the settings file or not
 
 ## Troubleshooting
+
 
 + If you have `autochdir` enabled, make sure to disable it: `set noautochdir`. This messes with getting the current
 working directory.
