@@ -71,10 +71,8 @@ call minpac#add('creativenull/projectcmd.nvim', { 'branch': 'v2' })
 [vim-plug][vim-plug]
 
 ```vim
-Plug 'creativenull/projectcmd.nvim'
+Plug 'creativenull/projectcmd.nvim', { 'branch': 'v2'}
 ```
-
-> _Note for vim-plug_: No need to add `packadd projectcmd.nvim`, since it loads automatically
 
 ## Configuration
 
