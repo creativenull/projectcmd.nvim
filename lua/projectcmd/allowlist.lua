@@ -23,7 +23,7 @@ local function _set(key, value)
     end
   end
 
-  local string_content = table.concat(contents, "\n")
+  local string_contents = table.concat(contents, "\n")
 
   local fp = io.open(ALLOWLIST_FILEPATH, 'w')
   fp:write(string_contents)
@@ -48,6 +48,7 @@ end
 
 M.remove = function()
   local currdir = vim.fn.cwd()
+  _remove(currdir)
 end
 
 return M

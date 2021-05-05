@@ -9,10 +9,16 @@ local function set_defaults(opts)
 
   if opts == nil then opts = {} end
 
-  if opts.list_filepath == nil then
+  if opts.root_dir == nil then
     vim.g['projectcmd#list_filepath'] = vim.fn.expand('~/.cache/nvim-nightly/projectcmd')
   else
-    vim.g['projectcmd#list_filepath'] = opts.list_filepath
+    vim.g['projectcmd#list_filepath'] = opts.root_dir
+  end
+
+  if opts.project_config_filepath == nil then
+    vim.g['projectcmd#config_filepath'] = '/.vim/init.lua'
+  else
+    vim.g['projectcmd#config_filepath'] = opts.project_config_filepath
   end
 
   if opts.enable == nil then
@@ -21,17 +27,11 @@ local function set_defaults(opts)
     vim.g['projectcmd#enable'] = opts.enable
   end
 
-  if opts.config_filepath == nil then
-    vim.g['projectcmd#config_filepath'] = '/.vim/init.lua'
-  else
-    vim.g['projectcmd#config_filepath'] = opts.config_filepath
-  end
-
   vim.g['projectcmd#message_load_response'] = '[PROJECTCMD] Local Config Loaded!'
-  if opts.message_enabled == nil then
+  if opts.show_message == nil then
     vim.g['projectcmd#message_enabled'] = true
   else
-    vim.g['projectcmd#message_enabled'] = opts.message_enabled
+    vim.g['projectcmd#message_enabled'] = opts.show_message
   end
 end
 
@@ -109,14 +109,20 @@ M.setup = function(opts)
 
   if not allowed_found then
     vim.g['projectcmd#prompt_show'] = true
-    vim.g['projectcmd#prompt_msg']  = '[PROJECTCMD] New project config file found, add to allowlist? (y/n/C) '
+    vim.g['projectcmd#prompt_msg']  = string.format(
+      '[PROJECTCMD] New project config file found at: "%s", add to allowlist? (y/n/C) ',
+      vim.g['projectcmd#config_filepath']
+    )
     vim.g['projectcmd#prompt_code'] = 'NEW'
     vim.g['projectcmd#prompt_args'] = hashed_contents
   end
 
   if changed_checksum then
     vim.g['projectcmd#prompt_show'] = true
-    vim.g['projectcmd#prompt_msg']  = '[PROJECTCMD] Config file changed, run? (y/N) '
+    vim.g['projectcmd#prompt_msg']  = string.format(
+      '[PROJECTCMD] Config file changed at "%s", run? (y/N) ',
+      vim.g['projectcmd#config_filepath']
+    )
     vim.g['projectcmd#prompt_code'] = 'CHANGE'
     vim.g['projectcmd#prompt_args'] = hashed_contents
   end

@@ -20,8 +20,8 @@ However, there might some options you may want to conditionally set in a project
 `secure` restrict you those options.
 
 __ProjectCMD__ tries to tackle this by not using `set secure` or `set exrc` but sourcing a .vim/.lua file in
-your `$PROJECT_DIR/.vim/init.vim`/`$PROJECT_DIR/.vim/init.lua` and only executing the code if it allowed by the user
-obfuscated from a potential malicious user.
+your `$PROJECT_DIR/.vim/init.vim`/`$PROJECT_DIR/.vim/init.lua` - if allowed by the user - and execute the code once its
+determined safe.
 
 Essentially, the goal of this plugin is to help you safely source your project-specific options. Think of it like an
 `.vscode/settings.json` file but for vim.
@@ -93,7 +93,7 @@ require 'projectcmd'.setup {}
 By default this is enabled, this means the plugin will source the local config file. If you want to manually source the
 local config file, then set the `enable` key to `true`.
 
-```
+```lua
 require 'projectcmd'.setup {
   enable = false
 }
@@ -101,9 +101,26 @@ require 'projectcmd'.setup {
 
 ## Default Settings
 
+Below are the default settings that are set, if not provided.
+
+```lua
+-- Default Settings
+require 'projectcmd'.setup {
+  enable = true,
+  show_message = true,
+  root_dir = '~/.cache/projectcmd',
+  project_config_filepath = '/.vim/init.lua'
+}
+```
+
+Key | Description
+----|------------
+`enable` | Let the plugin automatically source the project config file
+`show_message` | Shows the message on command line bar, at the bottom of statusline
+`root_dir` | Shows the message on command line bar, at the bottom of statusline
+`project_config_filepath` | Location of the local config file in the project directory
 
 ## Troubleshooting
-
 
 + If you have `autochdir` enabled, make sure to disable it: `set noautochdir`. This messes with getting the current
 working directory.
