@@ -63,28 +63,18 @@ local function create_allowlist()
   end
 end
 
-local function create_blocklist()
-  local blocklist = require 'projectcmd.config'.get_blocklist()
-  -- Create the blocklist file, if it does not exist
-  if vim.fn.filereadable(blocklist) == 0 then
-    create_file(blocklist)
-  end
-end
-
 local function init(opts)
   -- set default options on initialize
   set_defaults(opts)
 
   -- create files if they don't exists
   create_allowlist()
-  create_blocklist()
 end
 
 M.setup = function(opts)
   init(opts)
   local config = require 'projectcmd.config'
   local allowlist = config.get_allowlist()
-  local blocklist = config.get_blocklist()
   local currdir = vim.fn.getcwd()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
 
@@ -117,18 +107,7 @@ M.setup = function(opts)
     end
   end
 
-  -- Check if the filepath matches in blocklist
-  local blocked_found = false
   if not allowed_found then
-    for line in io.lines(blocklist) do
-      if currdir == line then
-        blocked_found = true
-        break
-      end
-    end
-  end
-
-  if not blocked_found and not allowed_found then
     vim.g['projectcmd#prompt_show'] = true
     vim.g['projectcmd#prompt_msg']  = '[PROJECTCMD] New project config file found, add to allowlist? (y/n/C) '
     vim.g['projectcmd#prompt_code'] = 'NEW'

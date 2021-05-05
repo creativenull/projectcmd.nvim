@@ -1,6 +1,5 @@
 local config = require 'projectcmd.config'
 local ALLOWLIST_FILEPATH = config.get_allowlist()
-local BLOCKLIST_FILEPATH = config.get_blocklist()
 local M = {}
 
 -- Add the item to the allowlist
