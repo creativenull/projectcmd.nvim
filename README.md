@@ -1,7 +1,6 @@
 # ProjectCMD (Alpha)
 
-> v2 is in active development now, v1 is still supports until v2 is ready
-> Try out [v2 here][v2]
+> v2 is in active development now, v1 is still supported until v2 is ready. Try out [v2 here][v2]
 
 A vim plugin to run your project-level neovim configuration.
 
