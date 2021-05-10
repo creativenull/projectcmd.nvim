@@ -31,6 +31,20 @@ local function _set(key, value)
 end
 
 local function _exists(key)
+  local fpcontents = io.input(ALLOWLIST_FILEPATH):read('a')
+
+  local contents = {}
+  for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
+
+  for k,v in pairs(contents) do
+    local keyvalues = {}
+    for content in string.gmatch(v, [[([^ ]+)]]) do table.insert(keyvalues, content) end
+    if keyvalues[1] == key then
+      return true
+    end
+  end
+
+  return false
 end
 
 -- Remove the item from the allowlist
@@ -39,6 +53,7 @@ end
 
 M.add = function(hash)
   local currdir = vim.fn.getcwd()
+  if _exists(currdir) then return end
   local value = string.format('%s %s\n', currdir, hash)
   _add(value)
 end
