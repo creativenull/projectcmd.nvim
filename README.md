@@ -1,5 +1,8 @@
 # ProjectCMD (Alpha)
 
+> v2 is in active development now, v1 is still supports until v2 is ready
+> Try out [v2 here][v2]
+
 A vim plugin to run your project-level neovim configuration.
 
 # Table of Contents
@@ -177,3 +180,5 @@ working directory.
 [ale-plugin]: https://github.com/dense-analysis/ale
 [vim-exrc]: https://vimhelp.org/options.txt.html#'exrc'
 [vim-secure]: https://vimhelp.org/options.txt.html#'secure'
+
+[v2]: https://github.com/creativenull/projectcmd.nvim/tree/v2
