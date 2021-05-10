@@ -30,19 +30,22 @@ local function _set(key, value)
   fp:close()
 end
 
+local function _exists(key)
+end
+
 -- Remove the item from the allowlist
 local function _remove(key)
 end
 
 M.add = function(hash)
   local currdir = vim.fn.getcwd()
-  local value = currdir .. ' ' .. hash .. "\n"
+  local value = string.format('%s %s\n', currdir, hash)
   _add(value)
 end
 
 M.update = function(hash)
   local currdir = vim.fn.getcwd()
-  local value = currdir .. ' ' .. hash .. "\n"
+  local value = string.format('%s %s\n', currdir, hash)
   _set(currdir, value)
 end
 

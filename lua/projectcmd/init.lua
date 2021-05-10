@@ -45,22 +45,19 @@ local function get_hash(filepath)
   local result = handle:read(32)
   result = trim(result)
   handle:close()
-
   return result
 end
 
-local function create_file(filepath)
+local function createfile(filename)
+  local filepath = string.format('%s/%s', vim.g['projectcmd#list_filepath'], filename)
+  if vim.fn.filereadable(filepath) == 1 then return end
   local file = io.open(filepath, 'w')
-  file:write('')
+  file:write()
   file:close()
 end
 
-local function create_allowlist()
-  local allowlist = require 'projectcmd.config'.get_allowlist()
-  -- Create the allowlist file, if it does not exist
-  if vim.fn.filereadable(allowlist) == 0 then
-    create_file(allowlist)
-  end
+local function exists(filepath)
+  return vim.fn.filereadable(filepath) == 1
 end
 
 local function init(opts)
@@ -68,12 +65,14 @@ local function init(opts)
   set_defaults(opts)
 
   -- create files if they don't exists
-  create_allowlist()
+  createfile('allowlist')
+  createfile('ignorelist')
 end
 
 M.setup = function(opts)
   init(opts)
   local config = require 'projectcmd.config'
+  local ignorelist = require 'projectcmd.ignorelist'
   local allowlist = config.get_allowlist()
   local currdir = vim.fn.getcwd()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
@@ -107,6 +106,12 @@ M.setup = function(opts)
     end
   end
 
+  -- Check if in ignorelist
+  if ignorelist.has(currdir) then
+    return
+  end
+
+  -- Show prompt for new and changed file
   if not allowed_found then
     vim.g['projectcmd#prompt_show'] = true
     vim.g['projectcmd#prompt_msg']  = string.format(
@@ -130,16 +135,35 @@ M.setup = function(opts)
   vim.g['projectcmd#loaded_init'] = true
 end
 
+-- Manually soruce the file and if in the ignorelist, then remove it
 M.enable = function()
+  local ignorelist = require 'projectcmd.ignorelist'
+  local allowlist = require 'projectcmd.allowlist'
   local message = vim.g['projectcmd#message_load_response']
   local message_enabled = vim.g['projectcmd#message_enabled']
   local currdir = vim.fn.getcwd()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
+  if not exists(init_filepath) then return end
+
+  -- Remove from ignorelist
+  if ignorelist.has(currdir) then
+    ignorelist.remove(currdir)
+  end
+
+  -- Add to allowlist
+  local hashed_contents = get_hash(init_filepath)
+  allowlist.add(hashed_contents)
+
+  -- Source the file
   dofile(init_filepath)
   if message_enabled then print(message) end
 end
 
+-- Prompt the user to remember and source the file
+-- or source the file again if any changes were made to the file
 M.prompt_enable = function()
+  local allowlist = require 'projectcmd.allowlist'
+  local ignorelist = require 'projectcmd.ignorelist'
   local enable = vim.g['projectcmd#enable']
   local currdir = vim.fn.getcwd()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
@@ -154,10 +178,11 @@ M.prompt_enable = function()
   vim.fn.inputrestore()
 
   if answer == 'y' then
+    -- Source the file
     if prompt_code == 'NEW' then
-      require 'projectcmd.allowlist'.add(prompt_hash)
+      allowlist.add(prompt_hash)
     elseif prompt_code == 'CHANGE' then
-      require 'projectcmd.allowlist'.update(prompt_hash)
+      allowlist.update(prompt_hash)
     end
 
     if enable then
@@ -167,9 +192,16 @@ M.prompt_enable = function()
         print(" \n" .. message)
       end
     end
+  elseif answer == 'n' then
+    -- Add to ignorelist
+    if prompt_code == 'NEW' then
+      ignorelist.add(currdir)
+    end
   end
 end
 
+-- Source the file if in allowlist, where there is no change
+-- or a new file to be sourced
 M.no_change_enable = function()
   local enable = vim.g['projectcmd#enable']
   local message_enabled = vim.g['projectcmd#message_enabled']
@@ -183,6 +215,19 @@ M.no_change_enable = function()
       print(message)
     end
   end
+end
+
+-- Open the local config file if exists
+-- else, create it
+M.open_config = function()
+  local currdir = vim.fn.getcwd()
+  local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
+
+  -- TODO:
+  -- Create file, must os platform agnostic
+  if not exists(init_filepath) then return end
+
+  vim.cmd(':edit ' .. init_filepath)
 end
 
 return M
