@@ -1,4 +1,4 @@
-# ProjectCMD (Experimental)
+# ProjectCMD (Beta)
 
 A vim plugin to run your project-level neovim configuration.
 
@@ -44,9 +44,6 @@ different projects.
 
 ## TODO
 
-+ [X] Omit the `type` key once we can automatically source based on the filepath extension. Solution: removed type
-+ [X] If both `.vim` and `.lua` files are present, then figure how to source them in order or require them to only have
-one file. Solution: in this case, use .vim only
 + [ ] Figure out a way to save previous settings, so that we can implement the disable feature. Solution: re-source
 vimrc file after calling `:ProjectCmdDisable` (not implemented)
 
@@ -54,37 +51,41 @@ vimrc file after calling `:ProjectCmdDisable` (not implemented)
 
 [Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
 
-Install via a plugin manager, any will do, here are examples using packer, minpac and vim-plug.
+Install via a plugin manager, any one will do, here are some examples using packer, minpac, vim-packager and vim-plug.
 
 [packer.nvim][packer]
 
 ```lua
-use { 'creativenull/projectcmd.nvim', branch = 'v2' }
+use 'creativenull/projectcmd.nvim'
 ```
 
 [Minpac][minpac]
 
 ```vim
-call minpac#add('creativenull/projectcmd.nvim', { 'branch': 'v2' })
+call minpac#add('creativenull/projectcmd.nvim')
+```
+
+[vim-packager][vim-packager]
+
+```vim
+call packager#add('creativenull/projectcmd.nvim')
 ```
 
 [vim-plug][vim-plug]
 
 ```vim
-Plug 'creativenull/projectcmd.nvim', { 'branch': 'v2'}
+Plug 'creativenull/projectcmd.nvim'
 ```
 
 ## Configuration
 
 ```vim
 " init.vim
-
 lua require 'projectcmd'.setup {}
 ```
 
 ```lua
 -- init.lua
-
 require 'projectcmd'.setup {}
 ```
 
@@ -125,9 +126,14 @@ Key | Description
 + If you have `autochdir` enabled, make sure to disable it: `set noautochdir`. This messes with getting the current
 working directory.
 
+## Contributing
+
+Guide coming soon, but you are more than welcome to explore the codebase and make an issue on the problem.
+
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
 [minpac]: https://github.com/k-takata/minpac
+[vim-packager]: https://github.com/kristijanhusak/vim-packager
 [vim-plug]: https://github.com/junegunn/vim-plug
 [ale-plugin]: https://github.com/dense-analysis/ale
 [vim-exrc]: https://vimhelp.org/options.txt.html#'exrc'
