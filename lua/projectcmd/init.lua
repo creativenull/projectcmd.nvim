@@ -1,3 +1,4 @@
+local utils = require('projectcmd.utils')
 local M = {}
 
 local function set_defaults(opts)
@@ -39,6 +40,7 @@ local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+-- TODO: Find out a way to hash content w/o platform dependent tools
 local function get_hash(filepath)
   local cmd = string.format([[md5sum %s | cut "-d " -f1]], filepath)
   local handle = io.popen(cmd)
@@ -155,7 +157,7 @@ M.enable = function()
   allowlist.add(hashed_contents)
 
   -- Source the file
-  dofile(init_filepath)
+  utils.source_by_type(init_filepath)
   if message_enabled then print(message) end
 end
 
@@ -186,7 +188,8 @@ M.prompt_enable = function()
     end
 
     if enable then
-      dofile(init_filepath)
+      -- dofile(init_filepath)
+      utils.source_by_type(init_filepath)
       if message_enabled then
         -- Make sure message is printed in a new line
         print(" \n" .. message)
@@ -210,7 +213,7 @@ M.no_change_enable = function()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
 
   if enable then
-    dofile(init_filepath)
+    utils.source_by_type(init_filepath)
     if message_enabled then
       print(message)
     end
@@ -223,11 +226,11 @@ M.open_config = function()
   local currdir = vim.fn.getcwd()
   local init_filepath = currdir .. vim.g['projectcmd#config_filepath']
 
-  -- TODO:
-  -- Create file, must os platform agnostic
-  if not exists(init_filepath) then return end
+  if not exists(init_filepath) then
+    return
+  end
 
-  vim.cmd(':edit ' .. init_filepath)
+  vim.cmd('edit ' .. init_filepath)
 end
 
 return M
