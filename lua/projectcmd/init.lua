@@ -36,18 +36,11 @@ local function set_defaults(opts)
   end
 end
 
-local function trim(s)
-  return (s:gsub("^%s*(.-)%s*$", "%1"))
-end
-
--- TODO: Find out a way to hash content w/o platform dependent tools
 local function get_hash(filepath)
-  local cmd = string.format([[md5sum %s | cut "-d " -f1]], filepath)
-  local handle = io.popen(cmd)
-  local result = handle:read(32)
-  result = trim(result)
-  handle:close()
-  return result
+  local fpcontents = io.input(filepath):read('a')
+  local hashed_content = vim.fn.sha256(fpcontents)
+  hashed_content = vim.trim(hashed_content)
+  return hashed_content
 end
 
 local function createfile(filename)
@@ -63,10 +56,10 @@ local function exists(filepath)
 end
 
 local function init(opts)
-  -- set default options on initialize
+  -- Set default options on initialize
   set_defaults(opts)
 
-  -- create files if they don't exists
+  -- Create files if they don't exists
   createfile('allowlist')
   createfile('ignorelist')
 end
