@@ -10,7 +10,7 @@ local function _get(value)
 
   local contents = {}
   for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
-  for k,v in pairs(contents) do
+  for _,v in pairs(contents) do
     if v == value then
       return value
     end
@@ -36,7 +36,7 @@ local function _add(value)
 
   -- if exists don't do anything
   for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
-  for k,v in pairs(contents) do
+  for _,v in pairs(contents) do
     if v == value then
       return
     end

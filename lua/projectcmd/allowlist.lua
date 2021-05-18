@@ -36,7 +36,7 @@ local function _exists(key)
   local contents = {}
   for content in string.gmatch(fpcontents, [[([^]+)]]) do table.insert(contents, content) end
 
-  for k,v in pairs(contents) do
+  for _,v in pairs(contents) do
     local keyvalues = {}
     for content in string.gmatch(v, [[([^ ]+)]]) do table.insert(keyvalues, content) end
     if keyvalues[1] == key then
@@ -48,8 +48,8 @@ local function _exists(key)
 end
 
 -- Remove the item from the allowlist
-local function _remove(key)
-end
+-- local function _remove(key)
+-- end
 
 M.add = function(hash)
   local currdir = vim.fn.getcwd()
@@ -64,9 +64,9 @@ M.update = function(hash)
   _set(currdir, value)
 end
 
-M.remove = function()
-  local currdir = vim.fn.cwd()
-  _remove(currdir)
-end
+-- M.remove = function()
+--   local currdir = vim.fn.cwd()
+--   _remove(currdir)
+-- end
 
 return M
