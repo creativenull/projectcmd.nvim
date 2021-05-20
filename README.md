@@ -60,7 +60,7 @@ The __change flow__, will be when you make changes to the local config file:
 
 ## Installation
 
-[Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
+IMPORTANT: [Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
 
 Install via a plugin manager, any one will do, here are some examples using packer, minpac, vim-packager and vim-plug.
 
