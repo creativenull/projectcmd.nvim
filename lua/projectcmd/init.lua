@@ -11,7 +11,7 @@ local function set_defaults(opts)
   if opts == nil then opts = {} end
 
   if opts.root_dir == nil then
-    vim.g['projectcmd#list_filepath'] = vim.fn.expand('~/.cache/nvim-nightly/projectcmd')
+    vim.g['projectcmd#list_filepath'] = vim.fn.expand('~/.cache/projectcmd')
   else
     vim.g['projectcmd#list_filepath'] = opts.root_dir
   end

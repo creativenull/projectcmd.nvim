@@ -2,7 +2,7 @@ local M = {}
 
 M.get_allowlist = function()
   if vim.fn.exists('g:projectcmd#list_filepath') == 0 then
-    return vim.fn.expand('~/.cache/nvim-nightly/projectcmd') .. '/allowlist'
+    return vim.fn.expand('~/.cache/projectcmd') .. '/allowlist'
   end
 
   return vim.g['projectcmd#list_filepath'] .. '/allowlist'
@@ -10,7 +10,7 @@ end
 
 M.get_ignorelist = function()
   if vim.fn.exists('g:projectcmd#list_filepath') == 0 then
-    return vim.fn.expand('~/.cache/nvim-nightly/projectcmd') .. '/ignorelist'
+    return vim.fn.expand('~/.cache/projectcmd') .. '/ignorelist'
   end
 
   return vim.g['projectcmd#list_filepath'] .. '/ignorelist'
