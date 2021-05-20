@@ -42,11 +42,6 @@ ALE to run only the specified linters and fixers, therefore, overriding the defa
 This way, you don't need to specify the linter and/or fixer in your vimrc and manually changing it every time for
 different projects.
 
-## TODO
-
-+ [ ] Figure out a way to save previous settings, so that we can implement the disable feature. Solution: re-source
-vimrc file after calling `:ProjectCmdDisable` (not implemented)
-
 ## Installation
 
 [Neovim nightly][nightly] (v0.5 or build from `master` branch) is __required__.
