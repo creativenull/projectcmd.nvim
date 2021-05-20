@@ -1,6 +1,6 @@
 # ProjectCMD (Beta)
 
-A vim plugin to run your project-level neovim configuration.
+A plugin to run your project-level neovim configuration.
 
 # Table of Contents
 
@@ -36,11 +36,26 @@ eslint and prettier for your code. Within your `$PROJECT_DIR/.vim/init.vim` you 
 autocmd! FileType javascript let b:ale_linters = ['tsserver', 'eslint'] | let b:ale_fixers = ['prettier']
 ```
 
-When you open vim it will prompt you to load the file, once accepted it will execute the file and register ALE commands.
-What the current file does, is that when you open a `javascript` type file it will set buffer variables defined by
-ALE to run only the specified linters and fixers, therefore, overriding the default ALE variables set for JavaScript.
-This way, you don't need to specify the linter and/or fixer in your vimrc and manually changing it every time for
-different projects.
+This will introduce two different flows for loading the local config file:
+
+#### First time flow
+
+The __first time flow__, will be when you open nvim for the first time, after adding the local config file:
+
+1. You will be prompted to add the local config file to the allowlist
+2. By saying (pressing any other key will perform the last action on this list):
+    1. `y`, it will add it to the allowlist and source the file
+    2. `n`, it will then be ignored until you manually source it yourself (see: [Autoloading](#autoloading))
+    3. `c`, it will then be ignored until you re-open nvim, to show the prompt
+
+#### Change flow
+
+The __change flow__, will be when you make changes to the local config file:
+
+1. You will be prompted to update the allowlist with the new checksum
+2. By saying (pressing any other key will perform the last action on this list):
+    1. `y`, it will add the updated checksum to the allowlist and source the file
+    2. `c`, it will then be ignored until you re-open nvim, to show the prompt
 
 ## Installation
 
@@ -84,10 +99,30 @@ lua require 'projectcmd'.setup {}
 require 'projectcmd'.setup {}
 ```
 
-#### Autoloading
+### Commands
+
+#### `:PCmdLoadConfig`
+
+Opens the local config file in your project.
+
+####`:PCmdOpenAllowlist`
+
+Opens the allowlist, displaying all your project directories that are to source the local config file.
+
+#### `:PCmdOpenIgnorelist`
+
+Opens the ignorelist, displaying all your project directories that are NOT allowed to be source, unless specified
+manually, or explicitly deleted from the ignorelist.
+
+#### `:PCmdEnable`
+
+Manually source the local config file if not done on the first prompt.
+
+### Autoloading
 
 By default this is enabled, this means the plugin will source the local config file. If you want to manually source the
-local config file, then set the `enable` key to `true`.
+local config file, then set the `enable` key to `true`. To manually source use `:PCmdEnable`, this will add the project
+to the allowlist and source.
 
 ```lua
 require 'projectcmd'.setup {
