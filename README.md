@@ -106,7 +106,7 @@ require 'projectcmd'.setup {}
 
 Opens the local config file in your project.
 
-####`:PCmdOpenAllowlist`
+#### `:PCmdOpenAllowlist`
 
 Opens the allowlist, displaying all your project directories that are to source the local config file.
 
@@ -159,7 +159,7 @@ working directory.
 
 ## Contributing
 
-Guide coming soon, but you are more than welcome to explore the codebase and make an issue on the problem.
+Guide coming soon, but you are more than welcome to explore the codebase and make an issue on the problem 🙂
 
 [nightly]: https://github.com/neovim/neovim/releases/tag/nightly
 [packer]: https://github.com/wbthomason/packer.nvim
