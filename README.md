@@ -36,7 +36,8 @@ eslint and prettier for your code. Within your `$PROJECT_DIR/.vim/init.vim` you 
 autocmd! FileType javascript let b:ale_linters = ['tsserver', 'eslint'] | let b:ale_fixers = ['prettier']
 ```
 
-This will introduce two different flows for loading the local config file:
+This will introduce two different flows for loading the local config file - which is by default
+`$PROJECT_DIR/.vim/init.lua`
 
 #### First time flow
 
