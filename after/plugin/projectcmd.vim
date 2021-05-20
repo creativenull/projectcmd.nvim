@@ -1,20 +1,12 @@
-if exists('g:loaded_projectcmd') || &cp
-    finish
-endif
+lua <<EOF
+local prompt_show = vim.g['projectcmd#prompt_show']
+local loaded = vim.g['projectcmd#loaded_init']
 
-let s:save_cpo = &cpo
-set cpo&vim
+if prompt_show then
+  require 'projectcmd'.prompt_enable()
+end
 
-if exists('g:projectcmd_options.key') == 0
-    finish
-endif
-
-" For auto source the file
-if exists('g:projectcmd_options.autoload') == 1 && g:projectcmd_options.autoload == 1
-    lua require 'projectcmd'.enable()
-endif
-
-let &cpo = s:save_cpo
-unlet s:save_cpo
-
-let g:loaded_projectcmd = 1
+if loaded and not prompt_show then
+  require 'projectcmd'.no_change_enable()
+end
+EOF

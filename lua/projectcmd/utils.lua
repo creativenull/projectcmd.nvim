@@ -1,50 +1,17 @@
-local config = require 'projectcmd.config'
 local M = {}
 
--- Get the settings filepath in the current working dir
--- @return string|nil
-local function get_filepath()
-  local project_vim_settings_dir = vim.fn.getcwd() .. '/.vim/settings.vim'
-  local project_lua_settings_dir = vim.fn.getcwd() .. '/.vim/settings.lua'
-
-  if vim.fn.filereadable(project_vim_settings_dir) == 1 then
-    return project_vim_settings_dir
-  elseif vim.fn.filereadable(project_lua_settings_dir) == 1 then
-    return project_lua_settings_dir
-  end
-
-  return nil
+function M.get_file_extension(filepath)
+  return string.match(filepath, '[^.]+$')
 end
 
--- Print debug type
--- @param str string
--- @return void
-function M.printd(str)
-  print(config.PRINTF_PLUGIN .. ' ' .. str)
-end
-
--- Print error
--- @param str string
--- @return void
-function M.print_err(str)
-  vim.api.nvim_err_writeln(config.PRINTF_PLUGIN .. ' ' .. str)
-end
-
--- Validate user options
--- @param opts table
--- @return table
-function M.validate_opts(opts)
-  if opts.key == nil then
-    opts.key = ''
+function M.source_by_type(init_filepath)
+  if M.get_file_extension(init_filepath) == 'lua' then
+    dofile(init_filepath)
   end
 
-  opts.filepath = get_filepath()
-
-  if opts.autoload == nil then
-    opts.autoload = false
+  if M.get_file_extension(init_filepath) == 'vim' then
+    vim.cmd('source ' .. init_filepath)
   end
-
-  return opts
 end
 
 return M
