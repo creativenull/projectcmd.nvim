@@ -43,16 +43,24 @@ local function get_hash(filepath)
   return hashed_content
 end
 
+local function exists(filepath)
+  return vim.fn.filereadable(filepath) == 1
+end
+
 local function createfile(filename)
-  local filepath = string.format('%s/%s', vim.g['projectcmd#list_filepath'], filename)
-  if vim.fn.filereadable(filepath) == 1 then return end
+  local dirpath = vim.g['projectcmd#list_filepath']
+  local filepath = string.format('%s/%s', dirpath, filename)
+  if exists(filepath) then
+    return
+  end
+
+  if vim.fn.isdirectory(dirpath) == 0 then
+    vim.cmd(':silent !mkdir ' .. dirpath)
+  end
+
   local file = io.open(filepath, 'w')
   file:write()
   file:close()
-end
-
-local function exists(filepath)
-  return vim.fn.filereadable(filepath) == 1
 end
 
 local function init(opts)
