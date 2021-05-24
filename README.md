@@ -121,9 +121,9 @@ Manually source the local config file if not done on the first prompt.
 
 ### Autoloading
 
-By default this is enabled, this means the plugin will source the local config file. If you want to manually source the
-local config file, then set the `enable` key to `true`. To manually source use `:PCmdEnable`, this will add the project
-to the allowlist and source.
+By default this is enabled, this means the plugin will source the local config file on load. If you want to manually source the
+local config file, then set the `enable` key to `false`. To manually source use `:PCmdEnable`, this will add the project
+to the allowlist but you will still need to `:PCmdEnable` every time you open vim in that project directory.
 
 ```lua
 require 'projectcmd'.setup {
